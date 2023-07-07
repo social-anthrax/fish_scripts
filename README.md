@@ -18,6 +18,7 @@ A very small collection of fish scripts I find useful.
     - `-s/--drop_stash` disables the persistent stash, and the stash will be popped instead.
     - `-h/--enable_hooks` flag can be used to re-enable git hooks for each operation.
     - `-d/--dry` will print out the commit difference between each local branch and its remote tracking branch without switching or pulling.
+  - `git-get-diff`: Prints the number of commits of commits that $argv[1] and $argv[2] are different by.
 
 ## Installation
 

@@ -20,7 +20,7 @@ function git-prune-local-branches --description 'Removes all local branches whic
     end
 end
 
-function git-hook-aware --wraps=git --description "calls git command and disables hooks"
+function git-hook-aware --wraps=git --description "calls git command and disables hooks" -V disable_hooks
     if set -q disable_hooks
         git -c core.hooksPath=/dev/null $argv
     else
