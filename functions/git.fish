@@ -2,7 +2,7 @@ function gt --wraps=git --description 'returns path to top level of git repo'
     git rev-parse --show-toplevel
 end
 
-function gd --wraps=batcat --wraps=cd --description 'jumps to top level of git repo'
+function gd --wraps=cd --description 'jumps to top level of git repo'
     cd $(git rev-parse --show-toplevel)
 end
 
