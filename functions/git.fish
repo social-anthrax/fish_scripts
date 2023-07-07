@@ -46,6 +46,11 @@ function git-get-remote
 
 end
 
+function git-get-diff --description="Prints the number of commits ahead and behind argv[1] and argv[2] are" -a local -a remote
+    git rev-list --left-right --count $local...$remote | read -l ahead behind
+    green-text "$local is $ahead commits ahead and $behind commits behind $remote"
+end
+
 
 function git-pull-all-exist-local --description 'Pulls all local branches unless they contain unpushed commits or uncommited files'
     argparse --name="git-pull-all-exist-local" d/dry s/drop_stash h/enable_hooks -- $argv
@@ -98,8 +103,7 @@ function git-pull-all-exist-local --description 'Pulls all local branches unless
         end
 
 
-        git rev-list --left-right --count $branch...$remote | read -l ahead behind
-        green-text "$branch is $ahead commits ahead and $behind commits behind $remote"
+        git-get-diff $branch $remote
         # Skip actually changing branches in dry mode
         if set -q _flag_dry
             continue
