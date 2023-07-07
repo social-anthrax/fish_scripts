@@ -10,6 +10,9 @@ function git-prune-local-branches --description 'Removes all local branches whic
     argparse --name="git_prune_local_branches" f/force -- $argv
     or return
 
+    git fetch --all --prune
+
+    # https://stackoverflow.com/a/46192689/8746334
     if set -q _flag_force
         git branch -vv | grep ': gone]' | grep -v "\*" | awk '{ print $1; }' | xargs -r git branch -D
     else
@@ -21,7 +24,7 @@ function git-hook-aware --wraps=git --description "calls git command and disable
     if set -q disable_hooks
         git -c core.hooksPath=/dev/null $argv
     else
-        git -c core.hooksPath=/dev/null $argv
+        git $argv
     end
 end
 
@@ -36,6 +39,11 @@ function red-text --wraps=echo:
     set_color red
     echo $argv
     set_color normal
+end
+
+function git-get-remote
+    git for-each-ref --format='%(upstream:short)' "$(git config branch.$argv[1].merge)"
+
 end
 
 
@@ -82,6 +90,21 @@ function git-pull-all-exist-local --description 'Pulls all local branches unless
             continue
         end
 
+        set -f remote (git-get-remote $branch)
+
+        if test -z "$remote"
+            red-text "No remote found for $branch, skipping."
+            continue
+        end
+
+
+        git rev-list --left-right --count $branch...$remote | read -l ahead behind
+        green-text "$branch is $ahead commits ahead and $behind commits behind $remote"
+        # Skip actually changing branches in dry mode
+        if set -q _flag_dry
+            continue
+        end
+
         # switch to branch
         green-text "Switching to $branch"
         git-hook-aware switch "$branch" --quiet
@@ -93,14 +116,9 @@ function git-pull-all-exist-local --description 'Pulls all local branches unless
         end
 
         # If remote is set pull from remote (We want to avoid errors as much as possible)
-        set -f remote (git for-each-ref --format='%(upstream:short)' "$(git symbolic-ref -q HEAD)") # https://stackoverflow.com/a/9753364
-        if test -n "$remote"
-            if not set -q _flag_dry
-                green-text Pulling $branch from "$remote"
-                git-hook-aware pull
-            end
-        else
-            red-text "No remote found for $branch, skipping."
+        if not set -q _flag_dry
+            green-text Pulling $branch from "$remote"
+            git-hook-aware pull
         end
     end
 
@@ -123,7 +141,7 @@ function git-pull-all-exist-local --description 'Pulls all local branches unless
     set -e disable_hooks
 
     # Pull with hooks re-enabled in case as that is usually expected behaviour
-    set -f remote (git for-each-ref --format='%(upstream:short)' "$(git symbolic-ref -q HEAD)") # https://stackoverflow.com/a/9753364
+    set -f remote (git-get-remote $current_branch)
     if test -n "$remote"
         if not set -q _flag_dry
             green-text Pulling $current_branch from "$remote"
