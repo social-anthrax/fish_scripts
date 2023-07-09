@@ -16,7 +16,7 @@ A very small collection of fish scripts I find useful.
   - `git-get-remote`: Returns the remote tracking branch for a local branch name.
   - `git-pull-all-exist-local`: Stashes all untracked and staged files, then iterates over all local branches pulling from remote. It will skip all branches that have commits that have not yet been pushed to remote. Once all branches are pulled it will switch back to the original branch, re-enable hooks and pull again. The stash by default is named and applied so it's not removed if there is conflict and can be applied again.
     - `-s/--drop_stash` disables the persistent stash, and the stash will be popped instead.
-    - `-h/--enable_hooks` flag can be used to re-enable git hooks for each operation.
+    - `-e/--enable_hooks` flag can be used to re-enable git hooks for each operation.
     - `-d/--dry` will print out the commit difference between each local branch and its remote tracking branch without switching or pulling.
   - `git-get-diff`: Prints the number of commits of commits that $argv[1] and $argv[2] are different by.
 

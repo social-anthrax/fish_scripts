@@ -53,7 +53,20 @@ end
 
 
 function git-pull-all-exist-local --description 'Pulls all local branches unless they contain unpushed commits or uncommited files'
-    argparse --name="git-pull-all-exist-local" d/dry s/drop_stash h/enable_hooks -- $argv
+    argparse --name="git-pull-all-exist-local" d/dry s/drop_stash e/enable_hooks h/help -- $argv
+
+    if set -q _flag_help
+        echo Description
+        echo "Pulls all local branches unless they contain unpushed commits or uncommited files"
+        echo
+        echo Options
+        echo "-h, --help            Shows this message"
+        echo "-d, --dry             Print out the commit differences between each local branch and it's remote tracking branch without switching or pulliing"
+        echo "-e, --drop_stash      Disables the persistent stash, popping the stash instead of applying it"
+        echo "-e, --enable_hooks    Enables git hooks for all branches instead of just the current branch"
+        return 0
+
+    end
 
     # Ignore all git hooks, we don't accidentally want to invoke anything
     if not set -q _flag_enable_hooks
