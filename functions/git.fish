@@ -7,7 +7,7 @@ function gd --wraps=cd --description 'jumps to top level of git repo'
 end
 
 function git-prune-local-branches --description 'Removes all local branches which have a deleted remote branch'
-    argparse --name="git_prune_local_branches" f/force -- $argv
+    argparse --name="git-prune-local-branches" f/force -- $argv
     or return
 
     git fetch --all --prune
@@ -29,14 +29,20 @@ function git-hook-aware --wraps=git --description "calls git command and disable
 end
 
 
-function green-text --wraps=echo:
+function green-text --wraps=echo
     set_color green
     echo $argv
     set_color normal
 end
 
-function red-text --wraps=echo:
+function red-text --wraps=echo
     set_color red
+    echo $argv
+    set_color normal
+end
+
+function yellow-text --wraps=echo
+    set_color yellow
     echo $argv
     set_color normal
 end
@@ -62,7 +68,7 @@ function git-pull-all-exist-local --description 'Pulls all local branches unless
         echo Options
         echo "-h, --help            Shows this message"
         echo "-d, --dry             Print out the commit differences between each local branch and it's remote tracking branch without switching or pulliing"
-        echo "-e, --drop_stash      Disables the persistent stash, popping the stash instead of applying it"
+        echo "-s, --drop_stash      Disables the persistent stash, popping the stash instead of applying it"
         echo "-e, --enable_hooks    Enables git hooks for all branches instead of just the current branch"
         return 0
 
@@ -167,4 +173,37 @@ function git-pull-all-exist-local --description 'Pulls all local branches unless
     else
         red-text "No remote found for $branch"
     end
+end
+
+
+function git-stash-clear-confirm --description "Drops all stashes"
+    argparse --name="git-drop-all-stashes" f/force -- $argv
+    or return 1
+    set -f stash_list (git stash list)
+    yellow-text "[WARNING] About to delete these stashes."
+    for stash in $stash_list
+        echo $stash
+    end
+
+    if not set -q _flag_force
+
+        echo ""
+        set_color yellow
+        read -lP "Continue? (y/N)" delete_flag
+        set_color normal
+
+        # if delete flag is true
+        if not set -q delete_flag || test (echo $delete_flag | string lower) != y
+            return 1
+        end
+    end
+
+    # Could replace with drop <name>
+    git stash clear
+
+end
+
+function git-update-repo --description="Updates the repo to reflect remote as much as possible"
+    git-pull-all-exist-local
+    git-prune-local-branches
 end
