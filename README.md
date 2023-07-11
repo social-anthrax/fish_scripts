@@ -41,7 +41,10 @@ Alternively move the files in the functions dir to your fish functions dir manua
 ```sh
 git clone git@github.com:social-anthrax/fish_scripts.git
 cd ./fish_scripts
+# symlink script
 ./install.fish
+# Manually copy
+cp ./functions/* ~/.config/fish/functions/
 ```
 
 ## Requirements
