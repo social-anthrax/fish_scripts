@@ -210,11 +210,13 @@ end
 
 
 function git-rebase-merge-base --description="Rebase the current branch with the last common commit from main" -a branch
-    if ! set -q branch or set -z branch
-        green-text "No branch provided, using default"
-        set -f branch (git rev-parse --abbrev-ref origin/HEAD | cut -d/ -f2-); or return 1
-
+    if test -z "$branch"
+        green-text "No branch provided, using origin/HEAD"
+        set -f branch (git rev-parse --abbrev-ref origin/HEAD | cut -d/ -f2-)
+        if test $pipestatus != 0
+            return 1
+        end
     end
-    set -l base (git merge-base "$branch" $(git rev-parse --abbrev-ref HEAD)); or return
+    set -l base (git merge-base "$branch" $(git rev-parse --abbrev-ref HEAD)); or return 1
     git rebase -i $base
 end
