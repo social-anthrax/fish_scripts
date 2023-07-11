@@ -207,3 +207,14 @@ function git-update-repo --description="Updates the repo to reflect remote as mu
     git-pull-all-exist-local
     git-prune-local-branches
 end
+
+
+function git-rebase-merge-base --description="Rebase the current branch with the last common commit from main" -a branch
+    if ! set -q branch or set -z branch
+        green-text "No branch provided, using default"
+        set -f branch (git rev-parse --abbrev-ref origin/HEAD | cut -d/ -f2-); or return 1
+
+    end
+    set -l base (git merge-base "$branch" $(git rev-parse --abbrev-ref HEAD)); or return
+    git rebase -i $merge-base
+end
