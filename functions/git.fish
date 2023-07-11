@@ -216,5 +216,5 @@ function git-rebase-merge-base --description="Rebase the current branch with the
 
     end
     set -l base (git merge-base "$branch" $(git rev-parse --abbrev-ref HEAD)); or return
-    git rebase -i $merge-base
+    git rebase -i $base
 end
