@@ -1,6 +1,6 @@
 # fish_scripts
 
-A very small collection of fish scripts I find useful.
+A small collection of fish scripts I find useful.
 
 ## Functions
 
@@ -42,14 +42,15 @@ Alternively move the files in the functions dir to your fish functions dir manua
 git clone git@github.com:social-anthrax/fish_scripts.git
 cd ./fish_scripts
 
-# symlink using symlinks
+# install using symlinks
 ./install.fish
 
 # Manually copy
 cp ./functions/* ~/.config/fish/functions/
+cp ./completions/* ~/.config/fish/completions/
 ```
 
 ## Requirements
 
-- eza (fork of exa as it's now unmaintained) in path (<https://eza.rocks/#installation:~:text=eza%20%2D%2D%20%2Dol.-,Installation,-eza%20is%20available>)
+- eza (fork of exa as exa is now unmaintained) in path (<https://eza.rocks/#installation:~:text=eza%20%2D%2D%20%2Dol.-,Installation,-eza%20is%20available>)
 - git
