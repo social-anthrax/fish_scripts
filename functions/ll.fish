@@ -1,3 +1,7 @@
 function ll --wraps=ls --wraps=exa --description 'List contents of directory using long format'
-    exa -lgh --git --icons $argv
+  if set -q exa_no_git
+    eza -lgh --icons $argv
+  else
+    eza -lgh --git --icons $argv
+  end
 end

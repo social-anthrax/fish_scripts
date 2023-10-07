@@ -41,13 +41,15 @@ Alternively move the files in the functions dir to your fish functions dir manua
 ```sh
 git clone git@github.com:social-anthrax/fish_scripts.git
 cd ./fish_scripts
-# symlink script
+
+# symlink using symlinks
 ./install.fish
+
 # Manually copy
 cp ./functions/* ~/.config/fish/functions/
 ```
 
 ## Requirements
 
-- exa with git and icons in path (<https://the.exa.website/#installation>)
+- eza (fork of exa as it's now unmaintained) in path (<https://eza.rocks/#installation:~:text=eza%20%2D%2D%20%2Dol.-,Installation,-eza%20is%20available>)
 - git
