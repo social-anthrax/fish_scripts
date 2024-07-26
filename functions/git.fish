@@ -1,3 +1,22 @@
+function green-text --wraps=echo
+    set_color green
+    echo $argv
+    set_color normal
+end
+
+function red-text --wraps=echo
+    set_color red
+    echo $argv
+    set_color normal
+end
+
+function yellow-text --wraps=echo
+    set_color yellow
+    echo $argv
+    set_color normal
+end
+
+
 function gt --wraps=git --description 'returns path to top level of git repo'
     git rev-parse --show-toplevel
 end
@@ -28,24 +47,6 @@ function git-hook-aware --wraps=git --description "calls git command and disable
     end
 end
 
-
-function green-text --wraps=echo
-    set_color green
-    echo $argv
-    set_color normal
-end
-
-function red-text --wraps=echo
-    set_color red
-    echo $argv
-    set_color normal
-end
-
-function yellow-text --wraps=echo
-    set_color yellow
-    echo $argv
-    set_color normal
-end
 
 function git-get-remote
     git for-each-ref --format='%(upstream:short)' "$(git config branch.$argv[1].merge)"
